@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
+  <rect width="400" height="300" fill="#e8eef5"/>
+  <g fill="none" stroke="#9fb3c8" stroke-width="10" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M140 165 L200 115 L260 165"/>
+    <path d="M155 152 V200 H245 V152"/>
+    <path d="M190 200 V172 H210 V200"/>
+  </g>
+</svg>

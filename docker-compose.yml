@@ -1,0 +1,63 @@
+services:
+  backend:
+    container_name: immo_backend
+    build:
+      context: ./backend
+      dockerfile: dockerfile
+    ports:
+      - "4001:8080"
+    environment:
+      - NODE_ENV=development
+      - PORT=8080
+      - DATABASE_URL=postgresql://postgres:postgres@bd:5432/immo_tul
+      - FRONTEND_URL=http://localhost:5000
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - bd
+    networks:
+      - nantenaina
+
+  bd:
+   container_name: immo_postgres
+   image: postgres:16-alpine 
+   restart: unless-stopped
+   ports:
+     - "8000:5432"
+   environment:
+     POSTGRES_DB:       immo_tul
+     POSTGRES_USER:     postgres
+     POSTGRES_PASSWORD: postgres
+   volumes:
+     - postgres_immo_data:/var/lib/postgresql/data
+   networks:
+     - nantenaina
+
+  fronted:
+   container_name: immo_fronted
+   build:
+     context: ./front-new
+     dockerfile: dockerfile
+     args:
+       BACKEND_INTERNAL_URL: http://backend:8080
+   ports:
+     - "5000:80"
+   environment:
+     - BACKEND_INTERNAL_URL=http://backend:8080
+   depends_on:
+     - backend
+   networks:
+     - nantenaina
+
+volumes:
+  postgres_immo_data:
+    name: postgres_dev_immo_data
+
+networks:
+  nantenaina:
+    name: nantenainanetwork
+    driver: bridge
+
+
+
+   

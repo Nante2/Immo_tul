@@ -1,0 +1,26 @@
+FROM node:20-alpine AS builder
+WORKDIR /app
+
+# Copier les fichiers de dépendances et installer
+COPY package.json package-lock.json ./
+RUN npm install
+
+# Copier le reste du code source
+COPY . .
+
+# Déclarer l'argument pour l'URL de l'API si nécessaire lors du build
+ARG VITE_API_URL
+ENV VITE_API_URL=$VITE_API_URL
+
+# Compiler l'application (génère le dossier /app/dist)
+RUN npm run build
+
+
+FROM nginx:alpine
+
+# Copier les fichiers générés dans le dossier public de Nginx
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
