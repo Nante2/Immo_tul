@@ -5,14 +5,15 @@ services:
     ports:
       - "4001:8080"
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=production
       - PORT=8080
       - DATABASE_URL=postgresql://postgres:postgres@bd:5432/immo_tul
       - FRONTEND_URL=http://localhost:5000
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:
-      - bd
+      bd:
+          condition: service_healthy
     networks:
       - nantenaina
 
@@ -30,8 +31,13 @@ services:
      - postgres_immo_data:/var/lib/postgresql/data
    networks:
      - nantenaina
-
-  fronted:
+   healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d immo_tul"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+ 
+  frontend:
    container_name: immo_fronted_prod
    image: nante2/immo_fronted_prod:latest
      
