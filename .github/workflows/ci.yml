@@ -1,0 +1,46 @@
+name: Test CI/CD Workflow
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  test-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Recuperer le code source
+        uses: actions/checkout@v6
+
+      - name: installer nodejs
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: 'front-new/package-lock.json'
+
+      - name: build frontend
+        working directory: front-new
+        run: |
+          npm ci
+          npm run build
+
+  test-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: installer nodejs pour le backend
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: 'backend/package-lock.json'
+
+      - name: Run backend tests
+        working directory: backend
+        run: |
+          npm ci    
