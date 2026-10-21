@@ -110,7 +110,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./backend
-          target: production
+          
           file: ./backend/dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/immo_backend_prod:latest       
