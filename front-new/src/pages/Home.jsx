@@ -15,7 +15,7 @@ function Home() {
       <Navbar />
       <Hero
         image="/image/Vclaire.jpg"
-        title="Votre agence immobilière à Toliara"
+        title="motre agence immobilière à Toliara"
         subtitle="Vente, location et gestion de biens immobiliers d'exception dans le Sud-Ouest de Madagascar"
       />
       <FeaturedProperties />
