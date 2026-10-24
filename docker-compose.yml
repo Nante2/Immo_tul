@@ -6,11 +6,7 @@ services:
       - "4001:8080"
     env_file:
       - .env  
-    environment:
-      - NODE_ENV=production
-      - PORT=8080
-      - DATABASE_URL=postgresql://postgres:postgres@bd:5432/immo_tul
-      - FRONTEND_URL=http://localhost:5000
+    
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:
@@ -26,9 +22,9 @@ services:
    ports:
      - "8000:5432"
    environment:
-     POSTGRES_DB:       immo_tul
-     POSTGRES_USER:     postgres
-     POSTGRES_PASSWORD: postgres
+     POSTGRES_DB: ${POSTGRES_DB}
+     POSTGRES_USER: ${POSTGRES_USER}
+     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}   
    volumes:
      - postgres_immo_data:/var/lib/postgresql/data
    networks:

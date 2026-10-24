@@ -7,10 +7,10 @@ services:
     ports:
       - "4001:8080"
     environment:
-      - NODE_ENV=development
-      - PORT=8080
-      - DATABASE_URL=postgresql://postgres:postgres@bd:5432/immo_tul
-      - FRONTEND_URL=http://localhost:5000
+      - NODE_ENV=${NODE_ENV}
+      - PORT=${BACKEND_PORT}
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@bd:5432/${POSTGRES_DB}
+      - FRONTEND_URL=${FRONTEND_URL}   
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:
@@ -25,9 +25,9 @@ services:
    ports:
      - "8000:5432"
    environment:
-     POSTGRES_DB:       immo_tul
-     POSTGRES_USER:     postgres
-     POSTGRES_PASSWORD: postgres
+     POSTGRES_DB: ${POSTGRES_DB}
+     POSTGRES_USER: ${POSTGRES_USER}
+     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}   
    volumes:
      - postgres_immo_data:/var/lib/postgresql/data
    networks:
@@ -39,7 +39,8 @@ services:
      context: ./front-new
      dockerfile: dockerfile
      args:
-       BACKEND_INTERNAL_URL: http://backend:8080
+       
+       VITE_API_URL: ${VITE_API_URL} 
    ports:
      - "5000:80"
    environment:
