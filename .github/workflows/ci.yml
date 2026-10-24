@@ -18,8 +18,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'npm'
-          cache-dependency-path: 'front-new/package-lock.json'
+        
+      - name: Cache des dependances Node.js
+        uses: actions/cache@v4
+        with:
+          path: front-new/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('front-new/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-  
 
       - name: Installer les dependances
         working-directory: front-new
