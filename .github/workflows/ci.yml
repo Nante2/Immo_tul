@@ -9,7 +9,6 @@ permissions:
 
 jobs:
   test-frontend:
-      test-frontend:
     runs-on: ubuntu-latest
     steps:
       - name: Recuperer le code source
