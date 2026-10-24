@@ -9,24 +9,32 @@ permissions:
 
 jobs:
   test-frontend:
+      test-frontend:
     runs-on: ubuntu-latest
     steps:
       - name: Recuperer le code source
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
-      - name: installer nodejs
-        uses: actions/setup-node@v6
+      - name: Installer Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'npm'
           cache-dependency-path: 'front-new/package-lock.json'
 
-      - name: build frontend
+      - name: Installer les dependances
         working-directory: front-new
-        run: |
-          npm ci
-          npm run build
+        run: npm ci
 
+      - name: Lint
+        working-directory: front-new
+        run: npm run lint
+
+      - name: Tests React (Vitest)
+        working-directory: front-new
+        run: npm test
+        env:
+          VITE_API_URL: /api
   test-backend:
     runs-on: ubuntu-latest
     steps:
