@@ -139,7 +139,15 @@ jobs:
           
           file: ./backend/dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/immo_backend_prod:latest 
+          tags: ${{ secrets.DOCKER_USERNAME }}/immo_backend_prod:latest
+
+      - name: Scan de l'image Docker Backend avec Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: '${{ secrets.DOCKER_USERNAME }}/immo_backend_prod:latest'
+          format: 'table'
+          exit-code: '0'
+          severity: 'CRITICAL,HIGH'   
           
   deploy:
     needs: [buildpushfrontend, buildpushbackend]
