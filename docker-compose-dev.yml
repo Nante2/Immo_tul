@@ -1,21 +1,20 @@
 services:
   backend:
-    container_name: immo_backend_prod
-    image: nante2/immo_backend_prod:latest
+    container_name: immo_backend
+    build:
+      context: ./backend
+      dockerfile: dockerfile
     ports:
       - "4001:8080"
-    env_file:
-      - .env  
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
       - PORT=8080
       - DATABASE_URL=postgresql://postgres:postgres@bd:5432/immo_tul
       - FRONTEND_URL=http://localhost:5000
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:
-      bd:
-          condition: service_healthy
+      - bd
     networks:
       - nantenaina
 
@@ -33,20 +32,16 @@ services:
      - postgres_immo_data:/var/lib/postgresql/data
    networks:
      - nantenaina
-   healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d immo_tul"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
- 
-  frontend:
-   container_name: immo_fronted_prod
-   image: nante2/immo_fronted_prod:latest
-     
+
+  fronted:
+   container_name: immo_fronted
+   build:
+     context: ./front-new
+     dockerfile: dockerfile
+     args:
+       BACKEND_INTERNAL_URL: http://backend:8080
    ports:
      - "5000:80"
-   volumes:
-     - ./nginx.conf:/etc/nginx/conf.d/default.conf 
    environment:
      - BACKEND_INTERNAL_URL=http://backend:8080
    depends_on:
@@ -63,3 +58,6 @@ networks:
     name: nantenainanetwork
     driver: bridge
 
+
+
+   
