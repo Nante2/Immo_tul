@@ -93,8 +93,18 @@ jobs:
           build-args: |
             VITE_API_URL=/api
             BACKEND_INTERNAL_URL=http://backend:8080         
-          tags: ${{ secrets.DOCKER_USERNAME }}/immo_fronted_prod:latest
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/immo_fronted_prod:latest
+            ${{ secrets.DOCKER_USERNAME }}/immo_fronted_prod:${{ github.sha }}
 
+      - name: Scan de l'image Docker Frontend avec Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: '${{ secrets.DOCKER_USERNAME }}/immo_fronted_prod:${{ github.sha }}'
+          format: 'table'
+          exit-code: '0'
+          severity: 'CRITICAL,HIGH'   
+          
   buildpushbackend:
     needs: test-backend
     runs-on: ubuntu-latest
