@@ -1,8 +1,8 @@
 name: Test CI/CD Workflow
 on:
-  push:
-    branches:
-      - main
+  release:
+    types:
+      - published
 
 permissions:
   contents: read
