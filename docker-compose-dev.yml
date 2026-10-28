@@ -9,7 +9,7 @@ services:
     environment:
       - NODE_ENV=${NODE_ENV}
       - PORT=${BACKEND_PORT}
-      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@bd:5432/${POSTGRES_DB}
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DB_HOST}:${DB_PORT}/${POSTGRES_DB}     
       - FRONTEND_URL=${FRONTEND_URL}   
     extra_hosts:
       - "host.docker.internal:host-gateway"
