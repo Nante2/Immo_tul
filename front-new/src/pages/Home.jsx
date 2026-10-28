@@ -15,7 +15,7 @@ function Home() {
       <Navbar />
       <Hero
         image="/image/Vclaire.jpg"
-        title="Motre agence immobilière à Tananarive"
+        title="Motre agence immobilière à Toliara"
         subtitle="Vente, location et gestion de biens immobiliers d'exception dans le Sud-Ouest de Madagascar"
       />
       <FeaturedProperties />
