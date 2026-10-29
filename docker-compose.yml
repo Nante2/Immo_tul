@@ -2,8 +2,7 @@ services:
   backend:
     container_name: immo_backend_prod
     image: nante2/immo_backend_prod:${IMAGE_TAG:-latest}    
-    ports:
-      - "4001:8080"
+    
     env_file:
       - .env  
     
@@ -19,8 +18,7 @@ services:
    container_name: immo_postgres
    image: postgres:16-alpine 
    restart: unless-stopped
-   ports:
-     - "8000:5432"
+   
    environment:
      POSTGRES_DB: ${POSTGRES_DB}
      POSTGRES_USER: ${POSTGRES_USER}

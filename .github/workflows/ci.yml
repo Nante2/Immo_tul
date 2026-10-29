@@ -160,6 +160,10 @@ jobs:
     steps:
       - name: Ckeckout du code
         uses: actions/checkout@v4
+      - name: Creer le fichier d environnement a partir du secret
+        env:
+          ENV_FILE: ${{ secrets.ENV_FILE }}
+        run: printf '%s\n' "$ENV_FILE" > env.production
 
       - name: Envoyer docker-compose.yml via SCP
         uses: appleboy/scp-action@v0.1.7
@@ -167,7 +171,7 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
-          source: "docker-compose.yml"
+          source: "docker-compose.yml,nginx.conf,env.production"
           target: "/home/nantenaina/immo_tul"
 
       - name: Deploy to server
@@ -184,6 +188,8 @@ jobs:
           script: |
             mkdir -p /home/nantenaina/immo_tul
             cd /home/nantenaina/immo_tul
+            mv env.production .env
+            chmod 600 .env
             export IMAGE_TAG
             docker compose -f docker-compose.yml pull
             docker compose -f docker-compose.yml up -d
