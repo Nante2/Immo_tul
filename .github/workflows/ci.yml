@@ -174,7 +174,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "docker-compose.yml,nginx.conf,env.production"
-          target: "/home/ubuntu/immo_tul"
+          target: "/home/nantenaina/immo_tul"
 
       - name: Deploy to server
         uses: appleboy/ssh-action@v0.1.9
@@ -188,8 +188,8 @@ jobs:
 
 
           script: |
-            mkdir -p /home/ubuntu/immo_tul
-            cd /home/ubuntu/immo_tul
+            mkdir -p /home/nantenaina/immo_tul
+            cd /home/nantenaina/immo_tul
             docker network inspect ecole_network_prod >/dev/null 2>&1 || { echo "Réseau ecole_network_prod absent : lancer d'abord EcoleManagement (ecole_prod)"; exit 1; }
             mv env.production .env
             chmod 600 .env
