@@ -163,7 +163,10 @@ jobs:
       - name: Creer le fichier d environnement a partir du secret
         env:
           ENV_FILE: ${{ secrets.ENV_FILE }}
-        run: printf '%s\n' "$ENV_FILE" > env.production
+        run: |
+          printf '%s\n' "$ENV_FILE" > env.production
+          # le compose monte ./nginx.conf : on le place à la racine avant l'envoi
+          cp front-new/nginx.conf nginx.conf
 
       - name: Envoyer docker-compose.yml via SCP
         uses: appleboy/scp-action@v0.1.7
@@ -172,7 +175,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "docker-compose.yml,nginx.conf,env.production"
-          target: "/home/nantenaina/immo_tul"
+          target: "/home/ubuntu/immo_tul"
 
       - name: Deploy to server
         uses: appleboy/ssh-action@v0.1.9
@@ -186,8 +189,10 @@ jobs:
 
 
           script: |
-            mkdir -p /home/nantenaina/immo_tul
-            cd /home/nantenaina/immo_tul
+            mkdir -p /home/ubuntu/immo_tul
+            cd /home/ubuntu/immo_tul
+            # Le Traefik de l'école doit tourner : il fournit ce réseau et le HTTPS
+            docker network inspect ecole_network_prod >/dev/null 2>&1 || { echo "Réseau ecole_network_prod absent : lancer d'abord EcoleManagement (ecole_prod)"; exit 1; }
             mv env.production .env
             chmod 600 .env
             export IMAGE_TAG

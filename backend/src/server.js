@@ -19,6 +19,12 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// En production, deux proxys sont devant l'API (Traefik puis nginx) :
+// sans cela, req.ip (et donc le rate-limit) verrait l'IP du proxy.
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 2);
+}
+
 // --- Middleware globaux ---
 app.use(helmet({ crossOriginResourcePolicy: false }));
 app.use(cors({ origin: process.env.FRONTEND_URL || 'http://localhost:5173', credentials: true }));
