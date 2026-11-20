@@ -10,7 +10,6 @@ services:
 
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    # Photos des biens : conservées entre deux déploiements
     volumes:
       - immo_uploads:/app/uploads
     depends_on:
@@ -44,8 +43,6 @@ services:
    image: nante2/immo_fronted_prod:${IMAGE_TAG:-latest}
    restart: unless-stopped
    mem_limit: 128m
-   # Pas de port publié : le Traefik du serveur eduk (ecole_traefik_prod)
-   # tient 80/443 et route nantenaina.ejlogiciel.com vers ce conteneur.
    volumes:
      - ./nginx.conf:/etc/nginx/conf.d/default.conf
 
@@ -73,8 +70,6 @@ networks:
   nantenaina:
     name: nantenainanetwork
     driver: bridge
-  # Réseau créé par le compose de l'école (EcoleManagement) : seul le
-  # frontend y est branché, le backend et la base restent isolés.
   ecole_proxy:
     external: true
     name: ecole_network_prod
